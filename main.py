@@ -168,7 +168,14 @@ def get_audit(db: sqlite3.Connection = Depends(get_db)):
 
 @app.get("/api/status")
 def get_status(db: sqlite3.Connection = Depends(get_db)):
-    res = db.execute("SELECT SUM(size_gb) AS total FROM audit_logs WHERE action = 'DELETE'").fetchone()
+    # Sommiamo sia i DELETE (positivi) che i REINSTALL (negativi)
+    # Usiamo IN ('DELETE', 'REINSTALL') per essere sicuri di calcolare il netto
+    res = db.execute("""
+        SELECT SUM(size_gb) AS total 
+        FROM audit_logs 
+        WHERE action IN ('DELETE', 'REINSTALL')
+    """).fetchone()
+    
     return {"total_saved": round(res["total"] or 0.0, 1)}
 
 

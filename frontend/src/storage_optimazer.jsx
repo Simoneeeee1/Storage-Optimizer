@@ -43,14 +43,14 @@ const App = () => {
     fetchData();
   };
 
-  const handleDelete = async (id) => {
-    await fetch(`${API}/delete/${id}`, { method: 'POST' });
-    fetchData();
-  };
-
   const handleReinstall = async (auditId) => {
     await fetch(`${API}/reinstall/${auditId}`, { method: 'POST' });
-    fetchData();
+    await fetchData(); // Aggiungi await qui per sicurezza
+  };
+
+  const handleDelete = async (id) => {
+    await fetch(`${API}/delete/${id}`, { method: 'POST' });
+    await fetchData(); // Aggiungi await qui per sicurezza
   };
 
   const handleAddException = async (e) => {
