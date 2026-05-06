@@ -43,14 +43,14 @@ const App = () => {
     fetchData();
   };
 
-  const handleReinstall = async (auditId) => {
-    await fetch(`${API}/reinstall/${auditId}`, { method: 'POST' });
-    await fetchData(); // Aggiungi await qui per sicurezza
-  };
-
   const handleDelete = async (id) => {
     await fetch(`${API}/delete/${id}`, { method: 'POST' });
-    await fetchData(); // Aggiungi await qui per sicurezza
+    fetchData();
+  };
+
+  const handleReinstall = async (auditId) => {
+    await fetch(`${API}/reinstall/${auditId}`, { method: 'POST' });
+    fetchData();
   };
 
   const handleAddException = async (e) => {
@@ -65,8 +65,8 @@ const App = () => {
     fetchData();
   };
 
-  const handleRemoveException = async (name) => {
-    await fetch(`${API}/exceptions/${name}`, { method: 'DELETE' });
+  const handleRemoveException = async (id) => {
+    await fetch(`${API}/exceptions/${id}`, { method: 'DELETE' });
     fetchData();
   };
 
@@ -175,7 +175,7 @@ const App = () => {
                       <td className="p-4 font-bold text-white">{a.item_name}</td>
                       <td className="p-4">
                         <span className={`px-2 py-1 rounded text-[10px] font-black uppercase ${
-                          a.action === 'DELETE' ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 
+                          a.action === 'CESTINA' ? 'bg-red-500/10 text-red-500 border border-red-500/20' : 
                           a.action === 'REINSTALL' ? 'bg-blue-500/10 text-blue-500 border border-blue-500/20' : 
                           'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
                         }`}>
@@ -260,7 +260,7 @@ const App = () => {
                           <td className="p-4 text-slate-500 text-[10px] font-bold uppercase tracking-tighter">{ex.type}</td>
                           <td className="p-4 text-slate-500 text-xs">{new Date(ex.added_at).toLocaleDateString()}</td>
                           <td className="p-4 text-right">
-                            <button onClick={() => handleRemoveException(ex.name)} className="p-2 text-slate-600 hover:text-red-500 transition-all">
+                            <button onClick={() => handleRemoveException(ex.id)} className="p-2 text-slate-600 hover:text-red-500 transition-all">
                               <Trash2 size={16}/>
                             </button>
                           </td>

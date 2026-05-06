@@ -25,3 +25,6 @@ dist-ssr
 # Cartella
 
 node_modules
+
+# file
+system_transparency.db

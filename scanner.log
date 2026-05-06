@@ -1,0 +1,154 @@
+2026-05-06 13:03:27,137 [INFO] Scansione: C:\Users\Simone/Downloads
+2026-05-06 13:03:27,148 [INFO] [DRY RUN] SCAN_FOUND — 'Appunti-compressed.pdf' (0.11 GB) | path: C:\Users\Simone/Downloads\Appunti-compressed.pdf | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:03:27,159 [INFO] [DRY RUN] SCAN_FOUND — 'datagrip-2025.2.2.exe' (0.88 GB) | path: C:\Users\Simone/Downloads\datagrip-2025.2.2.exe | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:03:27,177 [INFO] [DRY RUN] SCAN_FOUND — 'Geolife Trajectories 1.3.zip' (0.29 GB) | path: C:\Users\Simone/Downloads\Geolife Trajectories 1.3.zip | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:03:27,177 [INFO] [DRY RUN] SCAN_FOUND — 'GitHubDesktopSetup-x64.exe' (0.14 GB) | path: C:\Users\Simone/Downloads\GitHubDesktopSetup-x64.exe | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:03:27,205 [INFO] [DRY RUN] SCAN_FOUND — 'RStudio-2023.03.0-386.exe' (0.19 GB) | path: C:\Users\Simone/Downloads\RStudio-2023.03.0-386.exe | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:03:27,205 [INFO] [DRY RUN] SCAN_FOUND — 'RStudio-2023.03.1-446 (1).exe' (0.19 GB) | path: C:\Users\Simone/Downloads\RStudio-2023.03.1-446 (1).exe | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:03:27,207 [INFO] [DRY RUN] SCAN_FOUND — 'RStudio-2023.03.1-446.exe' (0.19 GB) | path: C:\Users\Simone/Downloads\RStudio-2023.03.1-446.exe | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:03:27,212 [INFO] [DRY RUN] SCAN_FOUND — 'training (1).csv' (0.26 GB) | path: C:\Users\Simone/Downloads\training (1).csv | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:03:27,212 [INFO] [DRY RUN] SCAN_FOUND — 'training.csv' (0.26 GB) | path: C:\Users\Simone/Downloads\training.csv | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:03:27,214 [INFO] Scansione: C:\Users\Simone/Documents
+2026-05-06 13:03:27,226 [INFO] Scansione: C:\Users\Simone/Desktop
+2026-05-06 13:03:28,125 [INFO] Scansione completata — totale: 775, nuovi candidati: 9, saltati: 766
+2026-05-06 13:09:33,096 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:09:33,097 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:09:33,149 [INFO] Added job "scan" to job store "default"
+2026-05-06 13:09:33,149 [INFO] Added job "process_expired_notifications" to job store "default"
+2026-05-06 13:09:33,149 [INFO] Scheduler started
+2026-05-06 13:09:33,150 [INFO] Server avviato — modalità: DRY RUN
+2026-05-06 13:10:33,103 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:10:33 CEST)" (scheduled at 2026-05-06 13:10:33.097119+02:00)
+2026-05-06 13:10:33,107 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:11:33 CEST)" executed successfully
+2026-05-06 13:11:33,098 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:12:33 CEST)" (scheduled at 2026-05-06 13:11:33.097119+02:00)
+2026-05-06 13:11:33,099 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:12:33 CEST)" executed successfully
+2026-05-06 13:12:33,107 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:13:33 CEST)" (scheduled at 2026-05-06 13:12:33.097119+02:00)
+2026-05-06 13:12:33,110 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:13:33 CEST)" executed successfully
+2026-05-06 13:13:33,098 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:14:33 CEST)" (scheduled at 2026-05-06 13:13:33.097119+02:00)
+2026-05-06 13:13:33,101 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:14:33 CEST)" executed successfully
+2026-05-06 13:14:33,110 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:15:33 CEST)" (scheduled at 2026-05-06 13:14:33.097119+02:00)
+2026-05-06 13:14:33,112 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:15:33 CEST)" executed successfully
+2026-05-06 13:15:33,106 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:16:33 CEST)" (scheduled at 2026-05-06 13:15:33.097119+02:00)
+2026-05-06 13:15:33,109 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:16:33 CEST)" executed successfully
+2026-05-06 13:16:33,106 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:17:33 CEST)" (scheduled at 2026-05-06 13:16:33.097119+02:00)
+2026-05-06 13:16:33,107 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:17:33 CEST)" executed successfully
+2026-05-06 13:17:33,113 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:18:33 CEST)" (scheduled at 2026-05-06 13:17:33.097119+02:00)
+2026-05-06 13:17:33,119 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:18:33 CEST)" executed successfully
+2026-05-06 13:17:37,653 [INFO] Scheduler has been shut down
+2026-05-06 13:17:38,577 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:17:38,578 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:17:38,627 [INFO] Added job "scan" to job store "default"
+2026-05-06 13:17:38,627 [INFO] Added job "process_expired_notifications" to job store "default"
+2026-05-06 13:17:38,628 [INFO] Scheduler started
+2026-05-06 13:17:38,628 [INFO] Server avviato — modalità: DRY RUN
+2026-05-06 13:18:19,401 [INFO] Scheduler has been shut down
+2026-05-06 13:18:20,189 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:18:20,189 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:18:20,219 [INFO] Added job "scan" to job store "default"
+2026-05-06 13:18:20,219 [INFO] Added job "process_expired_notifications" to job store "default"
+2026-05-06 13:18:20,219 [INFO] Scheduler started
+2026-05-06 13:18:20,220 [INFO] Server avviato — modalità: DRY RUN
+2026-05-06 13:18:49,024 [INFO] Scheduler has been shut down
+2026-05-06 13:19:05,140 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:19:05,141 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:19:05,175 [INFO] Added job "scan" to job store "default"
+2026-05-06 13:19:05,176 [INFO] Added job "process_expired_notifications" to job store "default"
+2026-05-06 13:19:05,176 [INFO] Scheduler started
+2026-05-06 13:19:05,176 [INFO] Server avviato — modalità: DRY RUN
+2026-05-06 13:20:05,151 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:20:05 CEST)" (scheduled at 2026-05-06 13:20:05.141218+02:00)
+2026-05-06 13:20:05,153 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:21:05 CEST)" executed successfully
+2026-05-06 13:21:05,153 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:22:05 CEST)" (scheduled at 2026-05-06 13:21:05.141218+02:00)
+2026-05-06 13:21:05,155 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:22:05 CEST)" executed successfully
+2026-05-06 13:21:41,255 [INFO] Eccezione aggiunta: file:///C:/Users/Simone/Downloads/ProgettoFormativo_4-244228.pdf (FILE)
+2026-05-06 13:22:05,156 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:23:05 CEST)" (scheduled at 2026-05-06 13:22:05.141218+02:00)
+2026-05-06 13:22:05,157 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:23:05 CEST)" executed successfully
+2026-05-06 13:23:05,150 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:24:05 CEST)" (scheduled at 2026-05-06 13:23:05.141218+02:00)
+2026-05-06 13:23:05,153 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:24:05 CEST)" executed successfully
+2026-05-06 13:24:05,144 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:25:05 CEST)" (scheduled at 2026-05-06 13:24:05.141218+02:00)
+2026-05-06 13:24:05,145 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:25:05 CEST)" executed successfully
+2026-05-06 13:24:56,163 [INFO] Scheduler has been shut down
+2026-05-06 13:24:56,789 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:24:56,789 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:24:56,821 [INFO] Added job "scan" to job store "default"
+2026-05-06 13:24:56,821 [INFO] Added job "process_expired_notifications" to job store "default"
+2026-05-06 13:24:56,821 [INFO] Scheduler started
+2026-05-06 13:24:56,822 [INFO] Server avviato — modalità: DRY RUN
+2026-05-06 13:25:46,139 [INFO] Scheduler has been shut down
+2026-05-06 13:25:48,873 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:25:48,873 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:25:48,909 [INFO] Added job "scan" to job store "default"
+2026-05-06 13:25:48,909 [INFO] Added job "process_expired_notifications" to job store "default"
+2026-05-06 13:25:48,909 [INFO] Scheduler started
+2026-05-06 13:25:48,910 [INFO] Server avviato — modalità: DRY RUN
+2026-05-06 13:26:28,179 [INFO] Eccezione rimossa: file:///C:/Users/Simone/Downloads/ProgettoFormativo_4-244228.pdf (id: 1)
+2026-05-06 13:26:48,887 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:26:48 CEST)" (scheduled at 2026-05-06 13:26:48.873800+02:00)
+2026-05-06 13:26:48,890 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:27:48 CEST)" executed successfully
+2026-05-06 13:27:48,882 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:28:48 CEST)" (scheduled at 2026-05-06 13:27:48.873800+02:00)
+2026-05-06 13:27:48,883 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:28:48 CEST)" executed successfully
+2026-05-06 13:28:48,885 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:29:48 CEST)" (scheduled at 2026-05-06 13:28:48.873800+02:00)
+2026-05-06 13:28:48,886 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:29:48 CEST)" executed successfully
+2026-05-06 13:29:48,883 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:30:48 CEST)" (scheduled at 2026-05-06 13:29:48.873800+02:00)
+2026-05-06 13:29:48,884 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:30:48 CEST)" executed successfully
+2026-05-06 13:30:48,889 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:31:48 CEST)" (scheduled at 2026-05-06 13:30:48.873800+02:00)
+2026-05-06 13:30:48,890 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:31:48 CEST)" executed successfully
+2026-05-06 13:31:48,874 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:32:48 CEST)" (scheduled at 2026-05-06 13:31:48.873800+02:00)
+2026-05-06 13:31:48,880 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:32:48 CEST)" executed successfully
+2026-05-06 13:32:48,879 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:33:48 CEST)" (scheduled at 2026-05-06 13:32:48.873800+02:00)
+2026-05-06 13:32:48,882 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:33:48 CEST)" executed successfully
+2026-05-06 13:33:48,878 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:34:48 CEST)" (scheduled at 2026-05-06 13:33:48.873800+02:00)
+2026-05-06 13:33:48,880 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:34:48 CEST)" executed successfully
+2026-05-06 13:34:48,874 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:35:48 CEST)" (scheduled at 2026-05-06 13:34:48.873800+02:00)
+2026-05-06 13:34:48,876 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:35:48 CEST)" executed successfully
+2026-05-06 13:35:48,877 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:36:48 CEST)" (scheduled at 2026-05-06 13:35:48.873800+02:00)
+2026-05-06 13:35:48,878 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:36:48 CEST)" executed successfully
+2026-05-06 13:36:48,875 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:37:48 CEST)" (scheduled at 2026-05-06 13:36:48.873800+02:00)
+2026-05-06 13:36:48,876 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:37:48 CEST)" executed successfully
+2026-05-06 13:37:48,877 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:38:48 CEST)" (scheduled at 2026-05-06 13:37:48.873800+02:00)
+2026-05-06 13:37:48,879 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:38:48 CEST)" executed successfully
+2026-05-06 13:38:48,879 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:39:48 CEST)" (scheduled at 2026-05-06 13:38:48.873800+02:00)
+2026-05-06 13:38:48,881 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:39:48 CEST)" executed successfully
+2026-05-06 13:39:21,269 [INFO] Scheduler has been shut down
+2026-05-06 13:39:54,501 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:39:54,502 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:39:54,542 [INFO] Added job "scan" to job store "default"
+2026-05-06 13:39:54,542 [INFO] Added job "process_expired_notifications" to job store "default"
+2026-05-06 13:39:54,542 [INFO] Scheduler started
+2026-05-06 13:39:54,543 [INFO] Server avviato — modalità: DRY RUN
+2026-05-06 13:40:52,847 [INFO] Scheduler has been shut down
+2026-05-06 13:41:21,005 [INFO] Scansione: C:\Users\Simone/Downloads
+2026-05-06 13:41:21,030 [INFO] [DRY RUN] SCAN_FOUND — 'Appunti-compressed.pdf' (0.11 GB) | path: C:\Users\Simone/Downloads\Appunti-compressed.pdf | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:41:21,051 [INFO] [DRY RUN] SCAN_FOUND — 'datagrip-2025.2.2.exe' (0.88 GB) | path: C:\Users\Simone/Downloads\datagrip-2025.2.2.exe | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:41:21,068 [INFO] [DRY RUN] SCAN_FOUND — 'Geolife Trajectories 1.3.zip' (0.29 GB) | path: C:\Users\Simone/Downloads\Geolife Trajectories 1.3.zip | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:41:21,069 [INFO] [DRY RUN] SCAN_FOUND — 'GitHubDesktopSetup-x64.exe' (0.14 GB) | path: C:\Users\Simone/Downloads\GitHubDesktopSetup-x64.exe | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:41:21,115 [INFO] [DRY RUN] SCAN_FOUND — 'training (1).csv' (0.26 GB) | path: C:\Users\Simone/Downloads\training (1).csv | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:41:21,116 [INFO] [DRY RUN] SCAN_FOUND — 'training.csv' (0.26 GB) | path: C:\Users\Simone/Downloads\training.csv | motivo: Inattivo da 132 giorni (soglia: 120gg)
+2026-05-06 13:41:21,121 [INFO] Scansione: C:\Users\Simone/Documents
+2026-05-06 13:41:21,127 [INFO] Scansione: C:\Users\Simone/Desktop
+2026-05-06 13:41:21,330 [INFO] Scansione completata — totale: 775, nuovi candidati: 6, saltati: 769
+2026-05-06 13:41:51,874 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:41:51,874 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:41:51,905 [INFO] Added job "scan" to job store "default"
+2026-05-06 13:41:51,905 [INFO] Added job "process_expired_notifications" to job store "default"
+2026-05-06 13:41:51,905 [INFO] Scheduler started
+2026-05-06 13:41:51,906 [INFO] Server avviato — modalità: DRY RUN
+2026-05-06 13:42:51,875 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:42:51 CEST)" (scheduled at 2026-05-06 13:42:51.874309+02:00)
+2026-05-06 13:42:51,876 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:43:51 CEST)" executed successfully
+2026-05-06 13:43:12,681 [INFO] Eccezione aggiunta: file:///C:/Users/Simone/Downloads/PianoRipasso_IT_Internship.pdf (FILE) | path: None
+2026-05-06 13:43:18,232 [INFO] Eccezione rimossa: file:///C:/Users/Simone/Downloads/PianoRipasso_IT_Internship.pdf (id: 1)
+2026-05-06 13:43:51,890 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:44:51 CEST)" (scheduled at 2026-05-06 13:43:51.874309+02:00)
+2026-05-06 13:43:51,891 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:44:51 CEST)" executed successfully
+2026-05-06 13:44:51,876 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:45:51 CEST)" (scheduled at 2026-05-06 13:44:51.874309+02:00)
+2026-05-06 13:44:51,877 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:45:51 CEST)" executed successfully
+2026-05-06 13:45:35,386 [INFO] Scheduler has been shut down
+2026-05-06 13:45:36,154 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:45:36,156 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:45:36,193 [INFO] Added job "scan" to job store "default"
+2026-05-06 13:45:36,193 [INFO] Added job "process_expired_notifications" to job store "default"
+2026-05-06 13:45:36,193 [INFO] Scheduler started
+2026-05-06 13:45:36,196 [INFO] Server avviato — modalità: DRY RUN
+2026-05-06 13:46:36,159 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:46:36 CEST)" (scheduled at 2026-05-06 13:46:36.156265+02:00)
+2026-05-06 13:46:36,161 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:47:36 CEST)" executed successfully
+2026-05-06 13:47:36,177 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:48:36 CEST)" (scheduled at 2026-05-06 13:47:36.156265+02:00)
+2026-05-06 13:47:36,179 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:48:36 CEST)" executed successfully
+2026-05-06 13:48:36,168 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:49:36 CEST)" (scheduled at 2026-05-06 13:48:36.156265+02:00)
+2026-05-06 13:48:36,169 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:49:36 CEST)" executed successfully
+2026-05-06 13:49:31,917 [INFO] Scheduler has been shut down
