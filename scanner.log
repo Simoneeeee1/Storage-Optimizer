@@ -170,3 +170,21 @@
 2026-05-06 13:54:32,695 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:55:32 CEST)" executed successfully
 2026-05-06 13:55:32,699 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:56:32 CEST)" (scheduled at 2026-05-06 13:55:32.683084+02:00)
 2026-05-06 13:55:32,702 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:56:32 CEST)" executed successfully
+2026-05-06 13:56:32,690 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:57:32 CEST)" (scheduled at 2026-05-06 13:56:32.683084+02:00)
+2026-05-06 13:56:32,692 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:57:32 CEST)" executed successfully
+2026-05-06 13:57:32,692 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:58:32 CEST)" (scheduled at 2026-05-06 13:57:32.683084+02:00)
+2026-05-06 13:57:32,694 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:58:32 CEST)" executed successfully
+2026-05-06 13:58:32,697 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:59:32 CEST)" (scheduled at 2026-05-06 13:58:32.683084+02:00)
+2026-05-06 13:58:32,699 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:59:32 CEST)" executed successfully
+2026-05-06 13:59:32,684 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 14:00:32 CEST)" (scheduled at 2026-05-06 13:59:32.683084+02:00)
+2026-05-06 13:59:32,686 [ERROR] Errore scheduler: no such table: notifications
+2026-05-06 13:59:32,686 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 14:00:32 CEST)" executed successfully
+2026-05-06 14:00:32,685 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 14:01:32 CEST)" (scheduled at 2026-05-06 14:00:32.683084+02:00)
+2026-05-06 14:00:32,686 [ERROR] Errore scheduler: no such table: notifications
+2026-05-06 14:00:32,687 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 14:01:32 CEST)" executed successfully
+2026-05-06 14:01:32,694 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 14:02:32 CEST)" (scheduled at 2026-05-06 14:01:32.683084+02:00)
+2026-05-06 14:01:32,697 [ERROR] Errore scheduler: no such table: notifications
+2026-05-06 14:01:32,698 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 14:02:32 CEST)" executed successfully
+2026-05-06 14:02:32,684 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 14:03:32 CEST)" (scheduled at 2026-05-06 14:02:32.683084+02:00)
+2026-05-06 14:02:32,685 [ERROR] Errore scheduler: no such table: notifications
+2026-05-06 14:02:32,685 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 14:03:32 CEST)" executed successfully
