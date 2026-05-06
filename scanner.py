@@ -16,7 +16,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-# ─── Configurazione ───────────────────────────────────────────────────────────
+#  Configurazione 
 SCAN_TARGETS = [
     os.path.expanduser("~/Downloads"),
     os.path.expanduser("~/Documents"),
@@ -29,7 +29,7 @@ APP_THRESHOLD_DAYS  = 180
 MIN_SIZE_GB         = 0.1
 
 
-# ─── Helpers ─────────────────────────────────────────────────────────────────
+#  Helpers 
 def get_size_gb(path: str) -> float:
     try:
         if os.path.isfile(path):
@@ -71,7 +71,7 @@ def log_dry_run_action(conn, item_name: str, action: str, reason: str, size_gb: 
     )
 
 
-# ─── Scanner principale ───────────────────────────────────────────────────────
+#  Scanner principale 
 def scan():
     conn = sqlite3.connect(DB_NAME)
     conn.row_factory = sqlite3.Row
