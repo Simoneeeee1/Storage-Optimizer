@@ -152,3 +152,21 @@
 2026-05-06 13:48:36,168 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:49:36 CEST)" (scheduled at 2026-05-06 13:48:36.156265+02:00)
 2026-05-06 13:48:36,169 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:49:36 CEST)" executed successfully
 2026-05-06 13:49:31,917 [INFO] Scheduler has been shut down
+2026-05-06 13:49:32,682 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:49:32,683 [INFO] Adding job tentatively -- it will be properly scheduled when the scheduler starts
+2026-05-06 13:49:32,712 [INFO] Added job "scan" to job store "default"
+2026-05-06 13:49:32,713 [INFO] Added job "process_expired_notifications" to job store "default"
+2026-05-06 13:49:32,713 [INFO] Scheduler started
+2026-05-06 13:49:32,713 [INFO] Server avviato — modalità: DRY RUN
+2026-05-06 13:50:32,693 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:50:32 CEST)" (scheduled at 2026-05-06 13:50:32.683084+02:00)
+2026-05-06 13:50:32,695 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:51:32 CEST)" executed successfully
+2026-05-06 13:51:32,688 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:52:32 CEST)" (scheduled at 2026-05-06 13:51:32.683084+02:00)
+2026-05-06 13:51:32,690 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:52:32 CEST)" executed successfully
+2026-05-06 13:52:32,685 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:53:32 CEST)" (scheduled at 2026-05-06 13:52:32.683084+02:00)
+2026-05-06 13:52:32,686 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:53:32 CEST)" executed successfully
+2026-05-06 13:53:32,691 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:54:32 CEST)" (scheduled at 2026-05-06 13:53:32.683084+02:00)
+2026-05-06 13:53:32,692 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:54:32 CEST)" executed successfully
+2026-05-06 13:54:32,694 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:55:32 CEST)" (scheduled at 2026-05-06 13:54:32.683084+02:00)
+2026-05-06 13:54:32,695 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:55:32 CEST)" executed successfully
+2026-05-06 13:55:32,699 [INFO] Running job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:56:32 CEST)" (scheduled at 2026-05-06 13:55:32.683084+02:00)
+2026-05-06 13:55:32,702 [INFO] Job "process_expired_notifications (trigger: interval[0:01:00], next run at: 2026-05-06 13:56:32 CEST)" executed successfully
