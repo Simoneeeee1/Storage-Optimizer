@@ -1,4 +1,4 @@
-# Logs
+#  Log 
 logs
 *.log
 npm-debug.log*
@@ -7,12 +7,13 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Frontend build 
 node_modules
 dist
 dist-ssr
 *.local
 
-# Editor directories and files
+# Editor
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -22,10 +23,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-# Cartella
 
-node_modules
+# Database (contiene dati personali) 
+*.db
+*.db-wal
+*.db-shm
 
-# file
-system_transparency.db
-scanner.log
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/

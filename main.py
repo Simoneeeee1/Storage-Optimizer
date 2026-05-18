@@ -1,15 +1,19 @@
 import os
 import sqlite3
 import logging
-from send2trash import send2trash
+from collections import defaultdict
+from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Depends, HTTPException
+from send2trash import send2trash
+from fastapi import FastAPI, Depends, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from apscheduler.schedulers.background import BackgroundScheduler
 
+from init_db import get_connection
 from scanner import scan, DRY_RUN
 
-# Logging 
+#  Logging 
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(message)s",
@@ -20,8 +24,26 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-DB_NAME = "system_transparency.db"
-app = FastAPI()
+# Flag per evitare scan concorrenti avviati dal trigger manuale
+_scan_running = False
+
+#  Scheduler 
+
+scheduler = BackgroundScheduler()
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    scheduler.add_job(scan, "interval", hours=6)
+    scheduler.add_job(process_expired_notifications, "interval", minutes=15)
+    scheduler.start()
+    logger.info(f"Server avviato — modalita: {'DRY RUN' if DRY_RUN else 'REALE'}")
+    yield
+    scheduler.shutdown()
+    logger.info("Server spento — scheduler fermato.")
+
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
@@ -31,28 +53,19 @@ app.add_middleware(
 )
 
 
-#  DB 
+#  DB helpers 
+
 def get_db():
-    conn = sqlite3.connect(DB_NAME, check_same_thread=False)
-    conn.row_factory = sqlite3.Row
+    conn = get_connection()
     try:
         yield conn
     finally:
         conn.close()
 
 
-def get_db_direct():
-    conn = sqlite3.connect(DB_NAME, check_same_thread=False)
-    conn.row_factory = sqlite3.Row
-    return conn
+#  Trash helper 
 
-
-#  Helpers trash 
 def move_to_trash(real_path: str) -> bool:
-    """
-    Sposta il file o la cartella nel cestino di sistema invece di eliminarli
-    definitivamente. Supporta Windows, macOS e Linux.
-    """
     try:
         if os.path.exists(real_path):
             send2trash(real_path)
@@ -66,10 +79,8 @@ def move_to_trash(real_path: str) -> bool:
         return False
 
 
-def log_action(conn, item_name: str, action: str, reason: str, size_gb: float, real_path: str):
-    """
-    Scrive in audit_logs marcando dry_run in base alla costante importata da scanner.
-    """
+def log_action(conn: sqlite3.Connection, item_name: str, action: str,
+               reason: str, size_gb: float, real_path: str):
     conn.execute("""
         INSERT INTO audit_logs (item_name, action, reason, size_gb, real_path, dry_run)
         VALUES (?, ?, ?, ?, ?, ?)
@@ -79,15 +90,10 @@ def log_action(conn, item_name: str, action: str, reason: str, size_gb: float, r
     logger.info(f"{prefix} {action} — '{item_name}' ({round(size_gb, 2)} GB) | {real_path} | {reason}")
 
 
-#  Scheduler 
+#  Scheduler job 
+
 def process_expired_notifications():
-    """
-    Gira ogni minuto.
-    Raccoglie le notifiche scadute senza risposta e le processa:
-    - DRY_RUN = True  → solo log, niente disco
-    - DRY_RUN = False → eliminazione reale
-    """
-    conn = get_db_direct()
+    conn = get_connection()
     try:
         expired = conn.execute("""
             SELECT n.id AS notif_id, n.item_id, i.name, i.size_gb, i.real_path
@@ -101,32 +107,17 @@ def process_expired_notifications():
 
         for row in expired:
             success = True
-
             if DRY_RUN:
-                logger.info(
-                    f"[DRY RUN] DELETE automatico scaduto — '{row['name']}' "
-                    f"({row['size_gb']} GB) | path: {row['real_path']}"
-                )
+                logger.info(f"[DRY RUN] DELETE automatico scaduto — '{row['name']}' ({row['size_gb']} GB)")
             else:
                 success = move_to_trash(row["real_path"])
 
             if success:
-                conn.execute(
-                    "UPDATE notifications SET user_action = 'DELETE' WHERE id = ?",
-                    (row["notif_id"],)
-                )
-                conn.execute(
-                    "UPDATE items SET status = 'DELETED' WHERE id = ?",
-                    (row["item_id"],)
-                )
-                log_action(
-                    conn,
-                    item_name=row["name"],
-                    action="DELETE",
-                    reason="Eliminato automaticamente per policy (notifica scaduta)",
-                    size_gb=row["size_gb"],
-                    real_path=row["real_path"]
-                )
+                conn.execute("UPDATE notifications SET user_action = 'DELETE' WHERE id = ?", (row["notif_id"],))
+                conn.execute("UPDATE items SET status = 'DELETED' WHERE id = ?", (row["item_id"],))
+                log_action(conn, item_name=row["name"], action="DELETE",
+                           reason="Eliminato automaticamente per policy (notifica scaduta)",
+                           size_gb=row["size_gb"], real_path=row["real_path"])
 
         if expired:
             conn.commit()
@@ -137,23 +128,48 @@ def process_expired_notifications():
         conn.close()
 
 
-scheduler = BackgroundScheduler()
-scheduler.add_job(scan, "interval", hours=6)
-scheduler.add_job(process_expired_notifications, "interval", minutes=1)
+#  Scan trigger helper 
+
+def _run_scan_safe():
+    """Wrapper che impedisce run concorrenti e logga inizio/fine."""
+    global _scan_running
+    if _scan_running:
+        logger.warning("Scan manuale richiesto ma uno scan e gia in corso, skip.")
+        return
+    _scan_running = True
+    try:
+        logger.info("Scan manuale avviato.")
+        scan()
+        logger.info("Scan manuale completato.")
+    except Exception as e:
+        logger.error(f"Errore durante scan manuale: {e}")
+    finally:
+        _scan_running = False
 
 
-@app.on_event("startup")
-def startup():
-    scheduler.start()
-    logger.info(f"Server avviato — modalità: {'DRY RUN' if DRY_RUN else 'REALE'}")
+#  API: scan trigger manuale 
+
+@app.post("/api/scan/trigger")
+def trigger_scan(background_tasks: BackgroundTasks):
+    """
+    Avvia una scansione immediata in background senza bloccare la risposta HTTP.
+    Utile durante lo sviluppo o subito dopo aver spostato/aggiunto file.
+    Restituisce immediatamente; il frontend puo interrogare /api/status o
+    ricaricare le notifiche dopo qualche secondo.
+    """
+    if _scan_running:
+        return {"status": "already_running", "message": "Uno scan e gia in corso."}
+    background_tasks.add_task(_run_scan_safe)
+    return {"status": "started", "message": "Scansione avviata in background."}
 
 
-@app.on_event("shutdown")
-def shutdown():
-    scheduler.shutdown()
+@app.get("/api/scan/status")
+def scan_status():
+    """Restituisce se uno scan e attualmente in esecuzione."""
+    return {"running": _scan_running}
 
 
-#  API 
+#  API: notifiche 
 
 @app.get("/api/notifications")
 def get_notifications(db: sqlite3.Connection = Depends(get_db)):
@@ -183,12 +199,8 @@ def delete_item(notification_id: int, db: sqlite3.Connection = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Notifica non trovata")
 
     success = True
-
     if DRY_RUN:
-        logger.info(
-            f"[DRY RUN] DELETE manuale — '{notif['name']}' "
-            f"({notif['size_gb']} GB) | path: {notif['real_path']}"
-        )
+        logger.info(f"[DRY RUN] DELETE manuale — '{notif['name']}'")
     else:
         success = move_to_trash(notif["real_path"])
 
@@ -196,22 +208,11 @@ def delete_item(notification_id: int, db: sqlite3.Connection = Depends(get_db)):
         raise HTTPException(status_code=500, detail="Errore durante l'eliminazione dal disco")
 
     with db:
-        db.execute(
-            "UPDATE notifications SET user_action = 'DELETE' WHERE id = ?",
-            (notification_id,)
-        )
-        db.execute(
-            "UPDATE items SET status = 'DELETED' WHERE id = ?",
-            (notif["item_id"],)
-        )
-        log_action(
-            db,
-            item_name=notif["name"],
-            action="DELETE",
-            reason="Eliminato manualmente dall'utente",
-            size_gb=notif["size_gb"],
-            real_path=notif["real_path"]
-        )
+        db.execute("UPDATE notifications SET user_action = 'DELETE' WHERE id = ?", (notification_id,))
+        db.execute("UPDATE items SET status = 'DELETED' WHERE id = ?", (notif["item_id"],))
+        log_action(db, item_name=notif["name"], action="DELETE",
+                   reason="Eliminato manualmente dall'utente",
+                   size_gb=notif["size_gb"], real_path=notif["real_path"])
 
     return {"status": "ok", "dry_run": DRY_RUN}
 
@@ -229,56 +230,46 @@ def keep_item(notification_id: int, db: sqlite3.Connection = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Notifica non trovata")
 
     with db:
-        db.execute(
-            "UPDATE notifications SET user_action = 'KEEP' WHERE id = ?",
-            (notification_id,)
-        )
-        log_action(
-            db,
-            item_name=notif["name"],
-            action="KEEP",
-            reason="Confermato dall'utente",
-            size_gb=notif["size_gb"],
-            real_path=notif["real_path"]
-        )
+        db.execute("UPDATE notifications SET user_action = 'KEEP' WHERE id = ?", (notification_id,))
+        log_action(db, item_name=notif["name"], action="KEEP",
+                   reason="Confermato dall'utente",
+                   size_gb=notif["size_gb"], real_path=notif["real_path"])
 
     return {"status": "ok"}
 
 
+# API: audit & status 
+
 @app.get("/api/audit")
 def get_audit(db: sqlite3.Connection = Depends(get_db)):
-    rows = db.execute(
-        "SELECT * FROM audit_logs ORDER BY timestamp DESC"
-    ).fetchall()
+    rows = db.execute("SELECT * FROM audit_logs ORDER BY timestamp DESC").fetchall()
     return [dict(r) for r in rows]
 
 
 @app.get("/api/status")
 def get_status(db: sqlite3.Connection = Depends(get_db)):
-    res = db.execute("""
-        SELECT SUM(size_gb) AS total FROM audit_logs
-        WHERE action = 'DELETE'
-    """).fetchone()
+    res = db.execute(
+        "SELECT SUM(size_gb) AS total FROM audit_logs WHERE action = 'DELETE'"
+    ).fetchone()
     return {
         "total_saved": round(res["total"] or 0.0, 1),
-        "dry_run": DRY_RUN
+        "dry_run": DRY_RUN,
+        "scan_running": _scan_running,
     }
 
 
 @app.post("/api/reinstall/{audit_id}")
 def reinstall_item(audit_id: int, db: sqlite3.Connection = Depends(get_db)):
     old = db.execute(
-        "SELECT item_name, size_gb, real_path FROM audit_logs WHERE id = ?",
-        (audit_id,)
+        "SELECT item_name, size_gb, real_path FROM audit_logs WHERE id = ?", (audit_id,)
     ).fetchone()
-
     if not old:
         raise HTTPException(status_code=404)
 
     if DRY_RUN:
-        logger.info(f"[DRY RUN] REINSTALL — '{old['item_name']}' | path: {old['real_path']}")
+        logger.info(f"[DRY RUN] REINSTALL — '{old['item_name']}'")
     else:
-        logger.info(f"[REALE] REINSTALL richiesto per '{old['item_name']}' — implementare restore da cestino")
+        logger.info(f"[REALE] REINSTALL richiesto per '{old['item_name']}'")
 
     with db:
         db.execute("""
@@ -286,47 +277,102 @@ def reinstall_item(audit_id: int, db: sqlite3.Connection = Depends(get_db)):
             VALUES (?, 'REINSTALL', 'Ripristinato', ?, ?, ?)
         """, (old["item_name"], -old["size_gb"], old["real_path"], 1 if DRY_RUN else 0))
 
-    db.commit()
     return {"status": "ok", "dry_run": DRY_RUN}
 
 
+#  API: eccezioni 
+
 @app.get("/api/exceptions")
 def get_exceptions(db: sqlite3.Connection = Depends(get_db)):
-    rows = db.execute(
-        "SELECT * FROM exceptions ORDER BY added_at DESC"
-    ).fetchall()
+    rows = db.execute("SELECT * FROM exceptions ORDER BY added_at DESC").fetchall()
     return [dict(r) for r in rows]
 
 
 @app.post("/api/exceptions")
 async def add_exception(data: dict, db: sqlite3.Connection = Depends(get_db)):
-    # real_path opzionale: se presente permette match preciso sul disco nello scanner
     real_path = data.get("real_path", None)
     db.execute(
         "INSERT OR IGNORE INTO exceptions (name, type, real_path) VALUES (?, ?, ?)",
         (data["name"], data["type"], real_path)
     )
     db.commit()
-    logger.info(f"Eccezione aggiunta: {data['name']} ({data['type']}) | path: {real_path}")
     return {"status": "ok"}
 
 
 @app.delete("/api/exceptions/{exception_id}")
 def remove_exception(exception_id: int, db: sqlite3.Connection = Depends(get_db)):
-    ex = db.execute(
-        "SELECT name FROM exceptions WHERE id = ?", (exception_id,)
-    ).fetchone()
-
+    ex = db.execute("SELECT name FROM exceptions WHERE id = ?", (exception_id,)).fetchone()
     if not ex:
-        raise HTTPException(status_code=404, detail="Eccezione non trovata")
-
+        raise HTTPException(status_code=404)
     db.execute("DELETE FROM exceptions WHERE id = ?", (exception_id,))
     db.commit()
-    logger.info(f"Eccezione rimossa: {ex['name']} (id: {exception_id})")
     return {"status": "removed"}
 
 
 @app.get("/api/config")
 def get_config():
-    """Espone la modalità corrente al frontend."""
     return {"dry_run": DRY_RUN}
+
+
+# API: duplicati 
+
+@app.get("/api/duplicates")
+def get_duplicates(db: sqlite3.Connection = Depends(get_db)):
+    hashes = db.execute("""
+        SELECT file_hash
+        FROM duplicates
+        WHERE status = 'ACTIVE'
+        GROUP BY file_hash
+        HAVING COUNT(*) > 1
+    """).fetchall()
+
+    if not hashes:
+        return {}
+
+    hash_list    = [r["file_hash"] for r in hashes]
+    placeholders = ",".join("?" * len(hash_list))
+
+    rows = db.execute(f"""
+        SELECT id, file_hash, name, size_gb, real_path
+        FROM duplicates
+        WHERE status = 'ACTIVE'
+          AND file_hash IN ({placeholders})
+        ORDER BY file_hash, found_at
+    """, hash_list).fetchall()
+
+    grouped: dict[str, list[dict]] = defaultdict(list)
+    for r in rows:
+        grouped[r["file_hash"]].append(dict(r))
+
+    return dict(grouped)
+
+
+@app.post("/api/duplicates/delete/{duplicate_id}")
+def delete_duplicate(duplicate_id: int, db: sqlite3.Connection = Depends(get_db)):
+    dup = db.execute("""
+        SELECT id, name, size_gb, real_path
+        FROM duplicates
+        WHERE id = ? AND status = 'ACTIVE'
+    """, (duplicate_id,)).fetchone()
+
+    if not dup:
+        raise HTTPException(status_code=404, detail="File duplicato non trovato")
+
+    success = True
+    if DRY_RUN:
+        logger.info(f"[DRY RUN] DELETE DUPLICATO — '{dup['name']}' | {dup['real_path']}")
+    else:
+        success = move_to_trash(dup["real_path"])
+
+    if not success:
+        raise HTTPException(status_code=500, detail="Impossibile rimuovere il file dal disco")
+
+    with db:
+        db.execute("UPDATE duplicates SET status = 'DELETED' WHERE id = ?", (duplicate_id,))
+        log_action(
+            db, item_name=dup["name"], action="DELETE_DUPLICATE",
+            reason="Rimozione copia duplicata superflua",
+            size_gb=dup["size_gb"], real_path=dup["real_path"]
+        )
+
+    return {"status": "ok", "dry_run": DRY_RUN}
