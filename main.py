@@ -12,7 +12,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from init_db import get_connection
 from scanner import scan, DRY_RUN
 
-#  Logging 
+# Logging 
 
 logging.basicConfig(
     level=logging.INFO,
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 # Flag per evitare scan concorrenti avviati dal trigger manuale
 _scan_running = False
 
-#  Scheduler 
+# Scheduler 
 
 scheduler = BackgroundScheduler()
 
@@ -53,7 +53,7 @@ app.add_middleware(
 )
 
 
-#  DB helpers 
+# DB helpers 
 
 def get_db():
     conn = get_connection()
@@ -63,7 +63,7 @@ def get_db():
         conn.close()
 
 
-#  Trash helper 
+# Trash helper 
 
 def move_to_trash(real_path: str) -> bool:
     try:
@@ -90,7 +90,7 @@ def log_action(conn: sqlite3.Connection, item_name: str, action: str,
     logger.info(f"{prefix} {action} — '{item_name}' ({round(size_gb, 2)} GB) | {real_path} | {reason}")
 
 
-#  Scheduler job 
+# Scheduler job 
 
 def process_expired_notifications():
     conn = get_connection()
@@ -128,7 +128,7 @@ def process_expired_notifications():
         conn.close()
 
 
-#  Scan trigger helper 
+# Scan trigger helper 
 
 def _run_scan_safe():
     """Wrapper che impedisce run concorrenti e logga inizio/fine."""
@@ -147,7 +147,7 @@ def _run_scan_safe():
         _scan_running = False
 
 
-#  API: scan trigger manuale 
+# API: scan trigger manuale 
 
 @app.post("/api/scan/trigger")
 def trigger_scan(background_tasks: BackgroundTasks):
@@ -169,7 +169,7 @@ def scan_status():
     return {"running": _scan_running}
 
 
-#  API: notifiche 
+# API: notifiche 
 
 @app.get("/api/notifications")
 def get_notifications(db: sqlite3.Connection = Depends(get_db)):
@@ -208,6 +208,8 @@ def delete_item(notification_id: int, db: sqlite3.Connection = Depends(get_db)):
         raise HTTPException(status_code=500, detail="Errore durante l'eliminazione dal disco")
 
     with db:
+        # UPDATE notifica → il trigger trg_notify_delete imposta items.status = 'DELETED'.
+        # L'UPDATE esplicito e un fallback nel caso il DB venga ricreato senza trigger.
         db.execute("UPDATE notifications SET user_action = 'DELETE' WHERE id = ?", (notification_id,))
         db.execute("UPDATE items SET status = 'DELETED' WHERE id = ?", (notif["item_id"],))
         log_action(db, item_name=notif["name"], action="DELETE",
@@ -230,9 +232,16 @@ def keep_item(notification_id: int, db: sqlite3.Connection = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Notifica non trovata")
 
     with db:
+        # UPDATE notifica → il trigger trg_notify_keep imposta items.status = 'KEPT'.
+        # L'UPDATE esplicito e un fallback nel caso il DB venga ricreato senza trigger.
         db.execute("UPDATE notifications SET user_action = 'KEEP' WHERE id = ?", (notification_id,))
+        db.execute(
+            "UPDATE items SET status = 'KEPT' WHERE id = "
+            "(SELECT item_id FROM notifications WHERE id = ?)",
+            (notification_id,)
+        )
         log_action(db, item_name=notif["name"], action="KEEP",
-                   reason="Confermato dall'utente",
+                   reason="Confermato dall'utente — escluso da scansioni future",
                    size_gb=notif["size_gb"], real_path=notif["real_path"])
 
     return {"status": "ok"}
@@ -251,10 +260,15 @@ def get_status(db: sqlite3.Connection = Depends(get_db)):
     res = db.execute(
         "SELECT SUM(size_gb) AS total FROM audit_logs WHERE action = 'DELETE'"
     ).fetchone()
+    kept = db.execute(
+        "SELECT COUNT(*) AS cnt FROM items WHERE status = 'KEPT'"
+    ).fetchone()
+
     return {
-        "total_saved": round(res["total"] or 0.0, 1),
-        "dry_run": DRY_RUN,
+        "total_saved":  round(res["total"] or 0.0, 1),
+        "dry_run":      DRY_RUN,
         "scan_running": _scan_running,
+        "kept_count":   kept["cnt"],   # elementi che l'utente ha scelto di mantenere
     }
 
 
@@ -280,7 +294,7 @@ def reinstall_item(audit_id: int, db: sqlite3.Connection = Depends(get_db)):
     return {"status": "ok", "dry_run": DRY_RUN}
 
 
-#  API: eccezioni 
+# API: eccezioni 
 
 @app.get("/api/exceptions")
 def get_exceptions(db: sqlite3.Connection = Depends(get_db)):

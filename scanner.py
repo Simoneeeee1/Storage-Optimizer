@@ -76,7 +76,7 @@ def log_dry_run_action(conn: sqlite3.Connection, item_name: str, action: str,
     )
 
 
-# Hashing (MD5 per dedup) 
+# Hashing (MD5 per dedup, NON per sicurezza)
 
 def get_partial_hash(filepath: str, block_size: int = 1024) -> Optional[str]:
     """Legge solo il primo blocco: veloce per pre-filtrare candidati diversi."""
@@ -271,10 +271,18 @@ def scan():
                 days_inactive = (datetime.now() - last_used).days
 
                 existing = conn.execute(
-                    "SELECT id, size_gb FROM items WHERE real_path = ?", (path,)
+                    "SELECT id, size_gb, status FROM items WHERE real_path = ?", (path,)
                 ).fetchone()
 
                 if existing:
+                    # Salta item che l'utente ha gia gestito consapevolmente:
+                    # KEPT  = l'utente ha scelto di mantenerlo → non risegnalare
+                    # DELETED = gia eliminato → non risegnalare
+                    if existing["status"] in ("KEPT", "DELETED"):
+                        saltati += 1
+                        continue
+
+                    # Item ACTIVE gia noto: aggiorna dimensione e data ultimo accesso
                     conn.execute("""
                         UPDATE items SET size_gb = ?, last_used = ? WHERE real_path = ?
                     """, (round(size_gb, 2), last_used.strftime("%Y-%m-%d %H:%M:%S"), path))
@@ -291,8 +299,10 @@ def scan():
                     item_id = conn.execute("SELECT last_insert_rowid()").fetchone()[0]
 
                     expires_at = (datetime.now() + timedelta(hours=48)).strftime("%Y-%m-%d %H:%M:%S")
+                    # L'indice unico parziale su notifications(item_id) WHERE user_action IS NULL
+                    # impedisce automaticamente notifiche duplicate per lo stesso item.
                     conn.execute("""
-                        INSERT INTO notifications (item_id, sent_at, expires_at)
+                        INSERT OR IGNORE INTO notifications (item_id, sent_at, expires_at)
                         VALUES (?, CURRENT_TIMESTAMP, ?)
                     """, (item_id, expires_at))
 

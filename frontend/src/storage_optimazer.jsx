@@ -197,6 +197,7 @@ const App = () => {
   const [deletingDupId, setDeletingDupId]         = useState(null);
   const [scanRunning, setScanRunning]             = useState(false);
   const [scanCooldown, setScanCooldown]           = useState(false); // blocca doppi click
+  const [keptCount, setKeptCount]                 = useState(0);
 
   const [searchTerm, setSearchTerm]               = useState("");
   const [newExceptionName, setNewExceptionName]   = useState("");
@@ -205,7 +206,7 @@ const App = () => {
 
   const { toasts, addToast } = useToast();
 
-  // ── Fetch ──────────────────────────────────────────────────────────────────
+  // Fetch 
 
   const fetchDuplicates = useCallback(async () => {
     setLoadingDuplicates(true);
@@ -234,6 +235,7 @@ const App = () => {
       const statusData = await statusRes.json();
       setTotalSaved(statusData.total_saved || 0);
       setScanRunning(statusData.scan_running || false);
+      setKeptCount(statusData.kept_count || 0);
     } catch (err) {
       console.error("Errore nel recupero dati:", err);
     }
@@ -257,7 +259,7 @@ const App = () => {
     return () => clearInterval(fastPoll);
   }, [scanRunning, fetchData]);
 
-  // ── Handlers ────────────────────────────────────────────────────────────────
+  // Handlers 
 
   const handleKeep = async (id) => {
     await fetch(`${API}/keep/${id}`, { method: 'POST' });
@@ -392,6 +394,13 @@ const App = () => {
               <div className="bg-orange-500/10 border border-orange-500/20 px-4 py-2 rounded-2xl">
                 <span className="text-orange-400 font-bold">{duplicateCount}</span>
                 <span className="text-slate-400 text-xs tracking-widest ml-1">DUPLICATI</span>
+              </div>
+            )}
+            {keptCount > 0 && (
+              <div className="bg-emerald-500/10 border border-emerald-500/20 px-4 py-2 rounded-2xl"
+                   title="Elementi che hai scelto consapevolmente di mantenere">
+                <span className="text-emerald-400 font-bold">{keptCount}</span>
+                <span className="text-slate-400 text-xs tracking-widest ml-1">MANTENUTI</span>
               </div>
             )}
             <div className="bg-blue-500/10 border border-blue-500/20 px-4 py-2 rounded-2xl">
