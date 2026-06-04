@@ -1,0 +1,16 @@
+# Python >= 3.10 richiesto (uso di `match`, `X | Y` type hints, `str.removesuffix`)
+
+# API
+fastapi>=0.111.0
+uvicorn[standard]>=0.29.0
+
+# Scheduler
+apscheduler>=3.10.0
+
+# Cestino di sistema (Windows, macOS, Linux)
+send2trash>=1.8.3
+
+# Windows only — ripristino dal cestino
+# Installa manualmente su Windows: pip install winshell pywin32
+# winshell>=0.6
+# pywin32>=306
