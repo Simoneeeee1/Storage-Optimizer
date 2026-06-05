@@ -68,12 +68,21 @@ def get_size_gb(path: str) -> float:
 
 def get_last_used(path: str) -> datetime | None:
     """
-    Restituisce il datetime dell'ultimo accesso (atime).
+    Restituisce il datetime dell'ultimo utilizzo effettivo.
+ 
+    Usa il massimo tra atime e mtime perché:
+      - su Linux con mount noatime, atime non viene aggiornato
+      - su macOS con SIP attivo, atime è spesso congelato
+    In entrambi i casi mtime cattura almeno l'ultima modifica,
+    evitando falsi positivi su file recenti proposti per la cancellazione.
+ 
     Ritorna None se il file è inaccessibile — il chiamante
     deve scartare esplicitamente questi elementi senza bypassare la soglia.
     """
     try:
-        return datetime.fromtimestamp(os.path.getatime(path))
+        stat = os.stat(path)
+        ts = max(stat.st_atime, stat.st_mtime)
+        return datetime.fromtimestamp(ts)
     except OSError:
         return None
 
